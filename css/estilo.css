@@ -1,0 +1,599 @@
+/* ==========================================================
+   TiendaSQL — estilos
+   Paleta: fondo cálido claro, acento teal (tienda) + ámbar (insignias),
+   editor de código en modo oscuro para diferenciarlo del resto de la UI.
+   ========================================================== */
+
+:root {
+    --color-fondo: #f6f4ef;
+    --color-panel: #ffffff;
+    --color-borde: #e4ddd0;
+    --color-texto: #2b2620;
+    --color-texto-suave: #6b6459;
+    --color-acento: #0f766e;
+    --color-acento-suave: #ccebe7;
+    --color-acento-oscuro: #0b5951;
+    --color-exito: #1a7d3b;
+    --color-exito-suave: #e2f5e6;
+    --color-error: #b3261e;
+    --color-error-suave: #fbe6e4;
+    --color-oro: #b7791f;
+    --color-oro-suave: #fbeed4;
+    --color-bloqueado: #b9b2a3;
+    --sombra: 0 2px 10px rgba(43, 38, 32, 0.08);
+    --radio: 12px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background: var(--color-fondo);
+    color: var(--color-texto);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    min-height: 100vh;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+#cabecera {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 24px;
+    background: var(--color-panel);
+    border-bottom: 1px solid var(--color-borde);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    flex-wrap: wrap;
+}
+
+.cabecera-titulo {
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--color-acento-oscuro);
+    white-space: nowrap;
+}
+
+.cabecera-progreso {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 140px;
+}
+
+.barra-progreso {
+    flex: 1;
+    height: 8px;
+    border-radius: 5px;
+    background: var(--color-borde);
+    overflow: hidden;
+}
+
+.barra-progreso-relleno {
+    height: 100%;
+    background: linear-gradient(90deg, var(--color-acento), var(--color-oro));
+    transition: width 0.4s ease;
+}
+
+#texto-progreso {
+    font-size: 0.85rem;
+    color: var(--color-texto-suave);
+    white-space: nowrap;
+}
+
+.cabecera-nav {
+    display: flex;
+    gap: 8px;
+}
+
+.btn-nav {
+    background: var(--color-acento-suave);
+    color: var(--color-acento-oscuro);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.btn-nav:hover { filter: brightness(0.95); }
+
+.btn-nav.btn-peligro {
+    background: var(--color-error-suave);
+    color: var(--color-error);
+}
+
+#app {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 24px 20px 60px;
+}
+
+.pantalla-carga {
+    position: fixed;
+    inset: 0;
+    background: var(--color-fondo);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    color: var(--color-texto-suave);
+    z-index: 100;
+}
+
+/* -------------------- Mapa de mundos -------------------- */
+
+.intro-juego {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.intro-juego h1 {
+    margin: 0 0 6px;
+    font-size: 1.8rem;
+    color: var(--color-acento-oscuro);
+}
+
+.intro-juego p {
+    margin: 0;
+    color: var(--color-texto-suave);
+}
+
+.mapa-mundos {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 18px;
+}
+
+.tarjeta-mundo {
+    background: var(--color-panel);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 18px;
+    box-shadow: var(--sombra);
+    text-align: left;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.15s ease;
+}
+
+.tarjeta-mundo.desbloqueado { cursor: pointer; }
+.tarjeta-mundo.desbloqueado:hover { transform: translateY(-3px); }
+
+.tarjeta-mundo.bloqueado {
+    opacity: 0.6;
+    filter: grayscale(0.4);
+}
+
+.tarjeta-mundo-cabeza {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.tarjeta-mundo-insignia { font-size: 1.6rem; }
+
+.tarjeta-mundo-titulo { font-weight: 700; font-size: 1.05rem; }
+
+.tarjeta-mundo-desc {
+    color: var(--color-texto-suave);
+    font-size: 0.88rem;
+    flex: 1;
+}
+
+.tarjeta-mundo-pie {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.8rem;
+    color: var(--color-texto-suave);
+}
+
+.tarjeta-mundo-pie .barra-progreso { height: 6px; }
+
+.chip-completado {
+    display: inline-block;
+    background: var(--color-exito-suave);
+    color: var(--color-exito);
+    font-size: 0.72rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 999px;
+}
+
+/* -------------------- Vista de mundo -------------------- */
+
+.btn-volver {
+    background: none;
+    border: none;
+    color: var(--color-acento-oscuro);
+    font-weight: 600;
+    padding: 4px 0;
+    margin-bottom: 14px;
+    font-size: 0.9rem;
+}
+
+.vista-mundo-cabeza {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.vista-mundo-cabeza .icono { font-size: 2rem; }
+
+.lista-niveles {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.item-nivel {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: var(--color-panel);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 14px 18px;
+    text-align: left;
+    font-size: 0.95rem;
+}
+
+.item-nivel.desbloqueado { cursor: pointer; }
+.item-nivel.desbloqueado:hover { border-color: var(--color-acento); }
+
+.item-nivel.bloqueado { opacity: 0.55; }
+
+.item-nivel-estado {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+    background: var(--color-borde);
+    color: var(--color-texto-suave);
+}
+
+.item-nivel.completado .item-nivel-estado { background: var(--color-exito-suave); color: var(--color-exito); }
+.item-nivel.desbloqueado:not(.completado) .item-nivel-estado { background: var(--color-acento-suave); color: var(--color-acento-oscuro); }
+
+.item-nivel-titulo { font-weight: 600; }
+.item-nivel-concepto { color: var(--color-texto-suave); font-size: 0.82rem; }
+
+/* -------------------- Vista de nivel -------------------- */
+
+.vista-nivel {
+    display: grid;
+    grid-template-columns: minmax(260px, 340px) 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 800px) {
+    .vista-nivel { grid-template-columns: 1fr; }
+}
+
+.panel {
+    background: var(--color-panel);
+    border: 1px solid var(--color-borde);
+    border-radius: var(--radio);
+    padding: 16px 18px;
+    box-shadow: var(--sombra);
+    margin-bottom: 16px;
+}
+
+.panel h2, .panel h3 {
+    margin-top: 0;
+    font-size: 1rem;
+    color: var(--color-acento-oscuro);
+}
+
+.panel-mision .mundo-etiqueta {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-texto-suave);
+    font-weight: 700;
+}
+
+.panel-mision h1 {
+    font-size: 1.3rem;
+    margin: 4px 0 10px;
+}
+
+.panel-mision .concepto-chip {
+    display: inline-block;
+    background: var(--color-acento-suave);
+    color: var(--color-acento-oscuro);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 3px 10px;
+    border-radius: 999px;
+    margin-bottom: 10px;
+}
+
+.panel-mision p { line-height: 1.5; }
+
+.tabla-esquema {
+    margin-bottom: 12px;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tabla-esquema.destacada { border-color: var(--color-acento); box-shadow: 0 0 0 2px var(--color-acento-suave); }
+
+.tabla-esquema-nombre {
+    background: var(--color-acento-suave);
+    color: var(--color-acento-oscuro);
+    font-weight: 700;
+    font-family: Consolas, monospace;
+    font-size: 0.85rem;
+    padding: 6px 10px;
+}
+
+.tabla-esquema-columna {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 4px 10px;
+    font-size: 0.8rem;
+    font-family: Consolas, monospace;
+    border-top: 1px solid var(--color-borde);
+}
+
+.tabla-esquema-columna .col-nombre { color: var(--color-texto); }
+.tabla-esquema-columna .col-tipo { color: var(--color-texto-suave); }
+.tabla-esquema-columna .col-notas { color: var(--color-acento-oscuro); flex-shrink: 0; }
+
+.chuleta pre {
+    background: var(--color-fondo);
+    border: 1px dashed var(--color-borde);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 0.82rem;
+    white-space: pre-wrap;
+    font-family: Consolas, monospace;
+    margin: 0;
+}
+
+.panel-pistas .btn-pista {
+    background: var(--color-oro-suave);
+    color: var(--color-oro);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-right: 8px;
+    margin-bottom: 8px;
+}
+
+.pista-revelada {
+    background: var(--color-oro-suave);
+    border-left: 3px solid var(--color-oro);
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    margin-bottom: 8px;
+    font-family: Consolas, monospace;
+    white-space: pre-wrap;
+}
+
+.editor-sql {
+    width: 100%;
+    min-height: 130px;
+    background: #1e1e1e;
+    color: #d4d4d4;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 12px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92rem;
+    resize: vertical;
+    line-height: 1.5;
+}
+
+/* -------- Resaltado de sintaxis SQL sobre el editor -------- */
+/* js/resaltado-sql.js envuelve cada .editor-sql en .editor-sql-contenedor y
+   coloca detrás un <pre class="editor-sql-fondo"> con las palabras clave
+   coloreadas. El textarea original pasa a ser transparente (solo se ve el
+   cursor) para que se lea el texto coloreado que hay debajo. */
+
+.editor-sql-contenedor {
+    position: relative;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.editor-sql-fondo {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 12px;
+    box-sizing: border-box;
+    overflow: hidden;
+    pointer-events: none;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.92rem;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    color: #d4d4d4;
+}
+
+.editor-sql-fondo code {
+    font: inherit;
+    color: inherit;
+    white-space: inherit;
+    word-wrap: inherit;
+}
+
+.editor-sql.editor-sql--resaltado {
+    position: relative;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    color: transparent;
+    caret-color: #d4d4d4;
+}
+
+.tok-palabra-clave {
+    color: #4fc1ff;
+    font-weight: 700;
+}
+
+.tok-cadena { color: #ce9178; }
+
+.tok-comentario { color: #6a9955; font-style: italic; }
+
+.editor-acciones {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.btn-primario {
+    background: var(--color-acento);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: 700;
+    font-size: 0.92rem;
+}
+
+.btn-primario:hover { background: var(--color-acento-oscuro); }
+
+.btn-secundario {
+    background: var(--color-borde);
+    color: var(--color-texto);
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 0.88rem;
+}
+
+.mensaje-resultado {
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-size: 0.88rem;
+    margin-bottom: 10px;
+    white-space: pre-wrap;
+    font-family: Consolas, monospace;
+}
+
+.mensaje-resultado.exito { background: var(--color-exito-suave); color: var(--color-exito); }
+.mensaje-resultado.error { background: var(--color-error-suave); color: var(--color-error); }
+
+.contenedor-tabla-resultado {
+    overflow-x: auto;
+    border: 1px solid var(--color-borde);
+    border-radius: 8px;
+}
+
+.barra-acciones-resultado {
+    display: flex;
+    justify-content: flex-end;
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--color-borde);
+    background: var(--color-fondo);
+}
+
+.btn-exportar-csv {
+    background: none;
+    border: 1px solid var(--color-borde);
+    color: var(--color-acento-oscuro);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 0.78rem;
+    font-weight: 600;
+}
+
+.btn-exportar-csv:hover { background: var(--color-acento-suave); }
+
+.tabla-resultado {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.82rem;
+    font-family: Consolas, monospace;
+}
+
+.tabla-resultado th, .tabla-resultado td {
+    padding: 6px 10px;
+    border-bottom: 1px solid var(--color-borde);
+    text-align: left;
+    white-space: nowrap;
+}
+
+.tabla-resultado th {
+    background: var(--color-fondo);
+    color: var(--color-acento-oscuro);
+}
+
+.tabla-resultado tr:last-child td { border-bottom: none; }
+
+.valor-nulo { color: var(--color-bloqueado); font-style: italic; }
+
+.panel-siguiente {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+/* -------------------- Modal de insignia -------------------- */
+
+.fondo-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(43, 38, 32, 0.55);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 200;
+}
+
+.modal-insignia {
+    background: var(--color-panel);
+    border-radius: var(--radio);
+    padding: 30px 36px;
+    text-align: center;
+    max-width: 360px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+}
+
+.modal-insignia .icono-grande { font-size: 3rem; }
+.modal-insignia h2 { color: var(--color-oro); margin: 10px 0 4px; }
+.modal-insignia p { color: var(--color-texto-suave); margin-bottom: 18px; }
+
+/* -------------------- Modo libre -------------------- */
+
+.modo-libre-layout {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) 1fr;
+    gap: 20px;
+    align-items: start;
+}
+
+@media (max-width: 800px) {
+    .modo-libre-layout { grid-template-columns: 1fr; }
+}

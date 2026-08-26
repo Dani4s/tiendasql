@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TiendaSQL — Aprende SQL jugando</title>
+<link rel="stylesheet" href="css/estilo.css">
+</head>
+<body>
+
+<div id="cabecera">
+    <div class="cabecera-titulo">🏪 TiendaSQL</div>
+    <div class="cabecera-progreso">
+        <div class="barra-progreso"><div id="barra-progreso-relleno" class="barra-progreso-relleno" style="width:0%"></div></div>
+        <span id="texto-progreso">0% completado</span>
+    </div>
+    <nav class="cabecera-nav">
+        <button id="btn-mapa" class="btn-nav">🗺️ Mapa</button>
+        <button id="btn-modo-libre" class="btn-nav">🧪 Modo libre</button>
+        <button id="btn-reiniciar" class="btn-nav btn-peligro">Reiniciar progreso</button>
+    </nav>
+</div>
+
+<main id="app"></main>
+
+<div id="cargando" class="pantalla-carga">
+    <p>Cargando el motor SQL (sql.js)...</p>
+</div>
+
+<script src="lib/sql-wasm.js"></script>
+<script src="js/db.js"></script>
+<script src="js/niveles.js"></script>
+<script src="js/progreso.js"></script>
+<script src="js/motor-juego.js"></script>
+<script src="js/importar-exportar.js"></script>
+<script src="js/resaltado-sql.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
