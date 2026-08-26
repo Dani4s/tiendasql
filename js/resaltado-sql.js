@@ -95,6 +95,11 @@ function procesarTextoSQL(texto) {
                 textoNuevo += palabra;
                 html += escaparHtmlSQL(palabra);
             }
+        } else if (otro === ',') {
+            // Las comas se resaltan aparte para que se note a simple vista
+            // dónde termina cada columna/valor de una lista.
+            textoNuevo += otro;
+            html += `<span class="tok-coma">${otro}</span>`;
         } else {
             textoNuevo += otro;
             html += escaparHtmlSQL(otro);

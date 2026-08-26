@@ -465,6 +465,8 @@ button {
 
 .tok-cadena { color: #ce9178; }
 
+.tok-coma { color: #ffcc66; font-weight: 700; }
+
 .tok-comentario { color: #6a9955; font-style: italic; }
 
 .editor-acciones {
