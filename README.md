@@ -64,7 +64,10 @@ npx http-server -p 8000
    auto-unión (`SELF JOIN`).
 4. **Modificar datos** — `INSERT`, `UPDATE`, `DELETE`, transacciones.
 5. **Sentencias DDL** — `CREATE TABLE`, `ALTER TABLE` (`ADD COLUMN`,
-   `RENAME COLUMN`, `RENAME TO`), `DROP TABLE`.
+   `DROP COLUMN`, `RENAME COLUMN`, `RENAME TO`), `DROP TABLE`, y la técnica
+   de recrear una tabla para cambiar el tipo de una columna (el equivalente
+   real en SQLite a `MODIFY COLUMN` / `CHANGE COLUMN` de MySQL, que SQLite
+   no soporta).
 6. **Consultas avanzadas** — subconsultas, `UNION`, `CASE WHEN`, funciones
    de ventana (`ROW_NUMBER`, `RANK`).
 7. **Diseño y buenas prácticas (bonus)** — restricciones (`CHECK`,

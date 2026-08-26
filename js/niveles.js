@@ -489,6 +489,23 @@ const MUNDOS = [
             ],
         },
         {
+            id: 'mddln6', titulo: 'Un dato que ya no hace falta',
+            mision: "Todos los proveedores de TiendaSQL son ahora locales, así que la columna 'pais' de la tabla proveedores quedó obsoleta. Elimínala por completo (sin borrar la tabla ni las demás columnas).",
+            concepto: 'Eliminar columnas con ALTER TABLE DROP COLUMN',
+            sintaxis: 'ALTER TABLE tabla DROP COLUMN columna;',
+            tablas: ['proveedores'], tipo: 'mutacion',
+            solucion: 'ALTER TABLE proveedores DROP COLUMN pais;',
+            pruebas: [
+                { sql: 'SELECT pais FROM proveedores;', debeFallar: true },
+                { sql: 'SELECT id, nombre FROM proveedores;', debeFallar: false },
+            ],
+            pistas: [
+                'ALTER TABLE tabla DROP COLUMN columna; quita una columna de una tabla ya existente, con todo y sus datos.',
+                'Las demás columnas y filas de la tabla no se ven afectadas.',
+                'ALTER TABLE proveedores DROP COLUMN pais;',
+            ],
+        },
+        {
             id: 'mddln3', titulo: 'Cambio de vocabulario',
             mision: "Recursos Humanos actualizó su terminología interna: lo que antes se llamaba 'puesto' ahora se llama 'cargo'. Renombra esa columna en la tabla empleados, conservando los datos.",
             concepto: 'Renombrar columnas con ALTER TABLE RENAME COLUMN',
@@ -531,6 +548,29 @@ const MUNDOS = [
             pistas: [
                 'DROP TABLE tabla; elimina la tabla ENTERA, con su estructura y todos sus datos. No hay vuelta atrás (a diferencia de DELETE, que solo borra filas).',
                 'DROP TABLE detalle_pedidos;',
+            ],
+        },
+        {
+            id: 'mddln7', titulo: 'El truco para cambiar un tipo de dato',
+            mision: "La tienda empezó a vender productos a granel (por peso), así que la columna 'cantidad' de detalle_pedidos —hoy INTEGER— necesita admitir decimales (ej. 1.5 kg). En MySQL bastaría con ALTER TABLE ... MODIFY COLUMN o CHANGE COLUMN, pero SQLite (el motor de este juego) NO soporta ninguna de las dos: no hay forma de cambiar el tipo de una columna existente directamente. La técnica real que SQLite recomienda es: crear una tabla nueva con la definición correcta, copiar los datos, borrar la vieja y renombrar la nueva a su nombre original. Cambia 'cantidad' a REAL así, conservando todas las filas y la restricción CHECK (cantidad > 0).",
+            concepto: 'Cambiar el tipo de una columna (equivalente a MODIFY/CHANGE COLUMN)',
+            sintaxis: 'CREATE TABLE tabla_nueva (\n    ...\n    columna TIPO_NUEVO ...\n);\nINSERT INTO tabla_nueva SELECT * FROM tabla_vieja;\nDROP TABLE tabla_vieja;\nALTER TABLE tabla_nueva RENAME TO tabla_vieja;',
+            tablas: ['detalle_pedidos'], tipo: 'mutacion',
+            solucion: `CREATE TABLE detalle_pedidos_nuevo (
+                id               INTEGER PRIMARY KEY,
+                pedido_id        INTEGER REFERENCES pedidos(id),
+                producto_id      INTEGER REFERENCES productos(id),
+                cantidad         REAL NOT NULL CHECK (cantidad > 0),
+                precio_unitario  REAL NOT NULL
+            );
+            INSERT INTO detalle_pedidos_nuevo SELECT * FROM detalle_pedidos;
+            DROP TABLE detalle_pedidos;
+            ALTER TABLE detalle_pedidos_nuevo RENAME TO detalle_pedidos;`,
+            verificacion: "SELECT (SELECT type FROM pragma_table_info('detalle_pedidos') WHERE name='cantidad') AS tipo_cantidad, (SELECT COUNT(*) FROM detalle_pedidos) AS total, (SELECT ROUND(SUM(cantidad), 2) FROM detalle_pedidos) AS suma_cantidad;",
+            pistas: [
+                'No existe un ALTER TABLE que cambie el tipo directamente en SQLite: hay que recrear la tabla completa con la estructura correcta.',
+                'Usa un nombre temporal para la tabla nueva (por ejemplo detalle_pedidos_nuevo), copia los datos con INSERT INTO ... SELECT * FROM ..., borra la tabla vieja con DROP TABLE, y por último usa ALTER TABLE ... RENAME TO para que la tabla nueva recupere el nombre original.',
+                'CREATE TABLE detalle_pedidos_nuevo (id INTEGER PRIMARY KEY, pedido_id INTEGER REFERENCES pedidos(id), producto_id INTEGER REFERENCES productos(id), cantidad REAL NOT NULL CHECK (cantidad > 0), precio_unitario REAL NOT NULL); INSERT INTO detalle_pedidos_nuevo SELECT * FROM detalle_pedidos; DROP TABLE detalle_pedidos; ALTER TABLE detalle_pedidos_nuevo RENAME TO detalle_pedidos;',
             ],
         },
       ],
