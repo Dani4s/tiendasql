@@ -27,6 +27,16 @@ const SQL_PALABRAS_CLAVE = [
 
 const CONJUNTO_PALABRAS_CLAVE_SQL = new Set(SQL_PALABRAS_CLAVE);
 
+// Tipos de dato: se resaltan con un color distinto al de las palabras clave.
+const SQL_TIPOS_DATO = [
+    'INTEGER', 'INT', 'TINYINT', 'SMALLINT', 'MEDIUMINT', 'BIGINT',
+    'TEXT', 'CHAR', 'CHARACTER', 'VARCHAR', 'NCHAR', 'NVARCHAR', 'CLOB',
+    'REAL', 'DOUBLE', 'FLOAT', 'NUMERIC', 'DECIMAL',
+    'BOOLEAN', 'BOOL', 'BLOB', 'DATE', 'DATETIME', 'TIMESTAMP', 'TIME',
+];
+
+const CONJUNTO_TIPOS_DATO_SQL = new Set(SQL_TIPOS_DATO);
+
 // Divide el texto en: comentarios de línea (--), comentarios de bloque
 // (/* */), cadenas entre comillas simples, identificadores entre comillas
 // dobles, palabras (identificadores/palabras clave) y cualquier otro
@@ -38,9 +48,14 @@ function escaparHtmlSQL(texto) {
 }
 
 // Devuelve { textoNuevo, html }: textoNuevo es el texto original con las
-// palabras clave puestas en mayúsculas (misma longitud, así el cursor no se
-// desplaza); html es ese mismo texto con las palabras clave, cadenas y
-// comentarios envueltos en <span> para colorearlos en el overlay.
+// palabras clave y los tipos de dato puestos en MAYÚSCULAS (misma longitud,
+// así el cursor no se desplaza); html es ese mismo texto con esas palabras,
+// cadenas y comentarios envueltos en <span> para colorearlos en el overlay.
+//
+// Si una palabra ya estaba en mayúsculas (porque antes era una palabra clave
+// o un tipo de dato reconocido) pero, tras borrar o agregar algún carácter,
+// deja de coincidir con la lista, se "des-resalta": se le quita el color y
+// se vuelve a convertir a minúsculas, como si nunca se hubiera reconocido.
 function procesarTextoSQL(texto) {
     let textoNuevo = '';
     let html = '';
@@ -61,10 +76,21 @@ function procesarTextoSQL(texto) {
             textoNuevo += identificador;
             html += escaparHtmlSQL(identificador);
         } else if (palabra !== undefined) {
-            if (CONJUNTO_PALABRAS_CLAVE_SQL.has(palabra.toUpperCase())) {
-                const mayus = palabra.toUpperCase();
+            const mayus = palabra.toUpperCase();
+            if (CONJUNTO_PALABRAS_CLAVE_SQL.has(mayus)) {
                 textoNuevo += mayus;
                 html += `<span class="tok-palabra-clave">${escaparHtmlSQL(mayus)}</span>`;
+            } else if (CONJUNTO_TIPOS_DATO_SQL.has(mayus)) {
+                textoNuevo += mayus;
+                html += `<span class="tok-tipo-dato">${escaparHtmlSQL(mayus)}</span>`;
+            } else if (/[A-Z]/.test(palabra)) {
+                // Ya no es una palabra clave ni un tipo de dato reconocido:
+                // si conserva mayúsculas de un resaltado anterior (se borró
+                // o se agregó una letra y se rompió la coincidencia), se
+                // devuelve a minúsculas y pierde el color.
+                const minus = palabra.toLowerCase();
+                textoNuevo += minus;
+                html += escaparHtmlSQL(minus);
             } else {
                 textoNuevo += palabra;
                 html += escaparHtmlSQL(palabra);

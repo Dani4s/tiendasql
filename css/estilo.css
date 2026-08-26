@@ -458,6 +458,11 @@ button {
     font-weight: 700;
 }
 
+.tok-tipo-dato {
+    color: #4ec9b0;
+    font-weight: 700;
+}
+
 .tok-cadena { color: #ce9178; }
 
 .tok-comentario { color: #6a9955; font-style: italic; }
