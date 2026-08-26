@@ -16,7 +16,7 @@ const SQL_PALABRAS_CLAVE = [
     'COUNT', 'SUM', 'AVG', 'MIN', 'MAX',
     'INNER', 'LEFT', 'RIGHT', 'FULL', 'OUTER', 'CROSS', 'JOIN', 'ON',
     'INSERT', 'INTO', 'VALUES', 'UPDATE', 'SET', 'DELETE',
-    'CREATE', 'TABLE', 'DROP', 'ALTER', 'ADD', 'COLUMN', 'IF',
+    'CREATE', 'TABLE', 'DROP', 'ALTER', 'ADD', 'COLUMN', 'RENAME', 'TO', 'IF',
     'UNION', 'ALL', 'CASE', 'WHEN', 'THEN', 'ELSE', 'END',
     'EXISTS', 'ANY', 'SOME',
     'ROW_NUMBER', 'RANK', 'DENSE_RANK', 'OVER', 'PARTITION',

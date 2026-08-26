@@ -63,9 +63,11 @@ npx http-server -p 8000
 3. **Relaciones entre tablas** — `INNER JOIN`, `LEFT JOIN`, JOIN múltiple,
    auto-unión (`SELF JOIN`).
 4. **Modificar datos** — `INSERT`, `UPDATE`, `DELETE`, transacciones.
-5. **Consultas avanzadas** — subconsultas, `UNION`, `CASE WHEN`, funciones
+5. **Sentencias DDL** — `CREATE TABLE`, `ALTER TABLE` (`ADD COLUMN`,
+   `RENAME COLUMN`, `RENAME TO`), `DROP TABLE`.
+6. **Consultas avanzadas** — subconsultas, `UNION`, `CASE WHEN`, funciones
    de ventana (`ROW_NUMBER`, `RANK`).
-6. **Diseño y buenas prácticas (bonus)** — restricciones (`CHECK`,
+7. **Diseño y buenas prácticas (bonus)** — restricciones (`CHECK`,
    `NOT NULL`, `FOREIGN KEY`), índices, vistas.
 
 ## Importar y exportar tablas SQL

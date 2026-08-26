@@ -454,6 +454,88 @@ const MUNDOS = [
       ],
     },
     // =========================================================
+    { id: 'mddl', titulo: 'Sentencias DDL', insignia: '🏗️',
+      descripcion: 'Antes de guardar datos hay que definir dónde viven: crea, modifica y elimina la estructura de las tablas con DDL (Data Definition Language).',
+      niveles: [
+        {
+            id: 'mddln1', titulo: 'Una tabla nueva para el almacén',
+            mision: "Almacén quiere empezar a registrar las entregas que hacen los proveedores. Crea una tabla llamada 'entregas' con las columnas: id (INTEGER, clave primaria), proveedor_id (INTEGER), fecha (TEXT) y cantidad (INTEGER).",
+            concepto: 'Crear tablas con CREATE TABLE',
+            sintaxis: 'CREATE TABLE tabla (\n    columna1 TIPO,\n    columna2 TIPO,\n    ...\n);',
+            tablas: ['proveedores'], tipo: 'mutacion',
+            solucion: 'CREATE TABLE entregas (id INTEGER PRIMARY KEY, proveedor_id INTEGER, fecha TEXT, cantidad INTEGER);',
+            pruebas: [
+                { sql: "INSERT INTO entregas (id, proveedor_id, fecha, cantidad) VALUES (1, 1, '2026-01-10', 50);", debeFallar: false },
+                { sql: "INSERT INTO entregas (id, proveedor_id, fecha, cantidad) VALUES (2, 2, '2026-01-12', 30);", debeFallar: false },
+            ],
+            pistas: [
+                'CREATE TABLE nombre (columna1 TIPO, columna2 TIPO, ...); define una tabla nueva y vacía.',
+                'La columna id debe llevar PRIMARY KEY justo después de su tipo.',
+                'CREATE TABLE entregas (id INTEGER PRIMARY KEY, proveedor_id INTEGER, fecha TEXT, cantidad INTEGER);',
+            ],
+        },
+        {
+            id: 'mddln2', titulo: 'Un dato que faltaba',
+            mision: "Atención al Cliente quiere poder guardar el teléfono de cada cliente, pero la tabla clientes no tiene esa columna. Agrégale una columna 'telefono' de tipo TEXT, sin tocar los datos que ya existen.",
+            concepto: 'Agregar columnas con ALTER TABLE ADD COLUMN',
+            sintaxis: 'ALTER TABLE tabla ADD COLUMN columna_nueva TIPO;',
+            tablas: ['clientes'], tipo: 'mutacion',
+            solucion: 'ALTER TABLE clientes ADD COLUMN telefono TEXT;',
+            verificacion: 'SELECT id, nombre, telefono FROM clientes ORDER BY id;',
+            pistas: [
+                'ALTER TABLE tabla ADD COLUMN columna TIPO; añade una columna nueva sin borrar las filas existentes.',
+                'La columna nueva empieza vacía (NULL) para todas las filas ya guardadas.',
+                'ALTER TABLE clientes ADD COLUMN telefono TEXT;',
+            ],
+        },
+        {
+            id: 'mddln3', titulo: 'Cambio de vocabulario',
+            mision: "Recursos Humanos actualizó su terminología interna: lo que antes se llamaba 'puesto' ahora se llama 'cargo'. Renombra esa columna en la tabla empleados, conservando los datos.",
+            concepto: 'Renombrar columnas con ALTER TABLE RENAME COLUMN',
+            sintaxis: 'ALTER TABLE tabla RENAME COLUMN columna_actual TO columna_nueva;',
+            tablas: ['empleados'], tipo: 'mutacion',
+            solucion: 'ALTER TABLE empleados RENAME COLUMN puesto TO cargo;',
+            verificacion: 'SELECT id, nombre, cargo FROM empleados ORDER BY id;',
+            pistas: [
+                'ALTER TABLE tabla RENAME COLUMN actual TO nueva; cambia el nombre de una columna sin afectar sus datos.',
+                'ALTER TABLE empleados RENAME COLUMN puesto TO cargo;',
+            ],
+        },
+        {
+            id: 'mddln4', titulo: 'Un nombre más claro',
+            mision: "El nuevo sistema de reportes va a manejar varios tipos de categorías (clientes, proveedores...), así que la tabla 'categorias' necesita un nombre menos ambiguo. Renómbrala a 'categorias_producto'.",
+            concepto: 'Renombrar tablas con ALTER TABLE RENAME TO',
+            sintaxis: 'ALTER TABLE nombre_actual RENAME TO nombre_nuevo;',
+            tablas: ['categorias'], tipo: 'mutacion',
+            solucion: 'ALTER TABLE categorias RENAME TO categorias_producto;',
+            pruebas: [
+                { sql: 'SELECT COUNT(*) FROM categorias_producto;', debeFallar: false },
+                { sql: 'SELECT COUNT(*) FROM categorias;', debeFallar: true },
+            ],
+            pistas: [
+                'ALTER TABLE actual RENAME TO nuevo; cambia el nombre de toda la tabla, con todo y sus datos.',
+                'Tras el cambio, el nombre viejo ya no existe: solo se puede consultar con el nombre nuevo.',
+                'ALTER TABLE categorias RENAME TO categorias_producto;',
+            ],
+        },
+        {
+            id: 'mddln5', titulo: 'Fin del experimento',
+            mision: "La empresa va a migrar el detalle de cada pedido a un sistema externo de facturación; ya no hace falta guardarlo en esta base. Elimina por completo la tabla 'detalle_pedidos'.",
+            concepto: 'Eliminar tablas con DROP TABLE',
+            sintaxis: 'DROP TABLE tabla;',
+            tablas: ['detalle_pedidos'], tipo: 'mutacion',
+            solucion: 'DROP TABLE detalle_pedidos;',
+            pruebas: [
+                { sql: 'SELECT * FROM detalle_pedidos;', debeFallar: true },
+            ],
+            pistas: [
+                'DROP TABLE tabla; elimina la tabla ENTERA, con su estructura y todos sus datos. No hay vuelta atrás (a diferencia de DELETE, que solo borra filas).',
+                'DROP TABLE detalle_pedidos;',
+            ],
+        },
+      ],
+    },
+    // =========================================================
     { id: 'm5', titulo: 'Consultas avanzadas', insignia: '🚀',
       descripcion: 'Preguntas más sofisticadas: subconsultas, combinaciones y funciones de ventana.',
       niveles: [
